@@ -25,14 +25,21 @@ and inflation-adjusted using the BLS Consumer Price Index.
 
 ![Net price by family income: Stanford vs. its peers](./figures/fig_aid_curve.png)
 
-## The story
+## Why this exists
+
+Stanford's headline sticker price gets quoted on its own all the time, without
+the context of what students actually end up paying, what they earn afterward,
+or how that compares to peer institutions. This project pulls the same
+government data any journalist can access and works out what the degree
+actually costs and returns, across the income distribution rather than as a
+single average.
 
 Published as a full feature article:
 
 **→ [Read the article](https://aayanahmed20.github.io/stanford-daily-price-of-prestige/)**
 (plus the [analysis notebook](https://aayanahmed20.github.io/stanford-daily-price-of-prestige/notebooks/notebook.html))
 
-The headline numbers:
+## Key findings
 
 - **Expensive on paper, affordable in practice.** Stanford's sticker price is
   $87,833 — 2.8x the national median of $31,112. But the *average net price*
@@ -52,7 +59,14 @@ The headline numbers:
   rose from $24,716 (2000-01) to $65,910 (2024-25) in 2025 dollars, roughly in
   line with peer elite privates (+48% vs +46%).
 
-## Reproduce it
+## Tech stack
+
+- Python 3.12, [Quarto](https://quarto.org/) 1.10 (article, notebook, and site rendering)
+- `pandas` / statistical analysis in `scripts/analysis.py`
+- `pytest` for tests, `ruff` for lint, `pre-commit` hooks
+- GitHub Actions CI, GitHub Pages for the published site
+
+## Getting started
 
 Requirements: Python 3.11+ (CI runs 3.12) and [Quarto](https://quarto.org/).
 
@@ -89,7 +103,7 @@ make lint
 make render
 ```
 
-## Repository layout
+## Project structure
 
 ```
 index.qmd                  Feature article (Quarto; the site homepage)
@@ -107,7 +121,7 @@ figures/                   Generated charts
 outputs/                   results.json + tables (the article's source of truth)
 ```
 
-## Data
+## The data
 
 | Source | What | Used for |
 | --- | --- | --- |
@@ -120,14 +134,18 @@ regression uses 1,079 schools with matched earnings and cost data. Every
 statistic in the article is read from `outputs/results.json`, so prose cannot
 drift out of sync with the data.
 
-## Notes on the data in this repo
-
 The raw downloads (~0.5 GB) are not committed: `scripts.download` fetches them
 from the U.S. Department of Education and FRED, and the Scorecard server blocks
 GitHub's cloud IPs, so CI can't reach it either. Instead, the *derived*
 artifacts (`data/processed/`, `outputs/`, `figures/`) are committed so the site
 builds on Pages without network access. Refresh them with `make pipeline` (or
 `make release-data`) and commit the changes.
+
+## Status
+
+Complete and published — the article, notebook, and site are live, and CI
+passes on the full pipeline (download → validate → preprocess → analyze →
+visualize → render).
 
 ## License
 
