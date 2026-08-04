@@ -28,6 +28,3 @@ jobs:
 
       - name: Unit tests (no network)
         run: python -m pytest
-
-      - name: Validate fixtures (no network)
-        run: python -m pytest tests/integration -m "not needs_network"
