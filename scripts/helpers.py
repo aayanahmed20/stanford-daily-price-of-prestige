@@ -197,7 +197,8 @@ def apply_style() -> None:
 def save_figure(fig: Any, name: str, subtitle: str | None = None) -> Path:
     """Save ``fig`` to ``figures/<name>.png`` at 300 dpi and return its path.
 
-    A small source line is drawn under the axes when ``subtitle`` is given.
+    A small source line (and masthead credit) is drawn under the axes when
+    ``subtitle`` is given.
     """
     import matplotlib.pyplot as plt
 
@@ -210,6 +211,17 @@ def save_figure(fig: Any, name: str, subtitle: str | None = None) -> Path:
             ha="left",
             va="top",
             fontsize=8.5,
+            color=PALETTE["slate"],
+            transform=fig.axes[0].transAxes,
+        )
+        fig.text(
+            1.0,
+            -0.04,
+            "The Stanford Daily",
+            ha="right",
+            va="top",
+            fontsize=8.5,
+            style="italic",
             color=PALETTE["slate"],
             transform=fig.axes[0].transAxes,
         )

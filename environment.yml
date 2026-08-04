@@ -1,6 +1,6 @@
 # Conda environment for the Price of Prestige analysis.
 # Create with:  conda env create -f environment.yml
-name: price-of-prestige
+name: stanford-daily-price-of-prestige
 channels:
   - conda-forge
   - defaults

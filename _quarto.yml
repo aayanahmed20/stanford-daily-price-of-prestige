@@ -6,6 +6,8 @@ project:
 website:
   title: "The Price of Prestige"
   description: "What a Stanford degree is actually worth, from the College Scorecard."
+  site-url: "https://aayanahmed20.github.io/stanford-daily-price-of-prestige/"
+  repo-url: "https://github.com/aayanahmed20/stanford-daily-price-of-prestige"
   navbar:
     left:
       - text: "Article"

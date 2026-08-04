@@ -14,7 +14,7 @@ assume good faith.
 
 ```bash
 git clone https://github.com/aayanahmed20/stanford-daily-price-of-prestige.git
-cd price-of-prestige
+cd stanford-daily-price-of-prestige
 python -m venv .venv && .venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 pre-commit install
