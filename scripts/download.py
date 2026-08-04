@@ -42,6 +42,14 @@ TREND_COLUMNS = ["UNITID", "INSTNM", "CONTROL", "COSTT4_A", "TUITIONFEE_IN", "NP
 # ---------------------------------------------------------------------------
 
 
+# A browser-like User-Agent: the Scorecard download server and FRED reject the
+# default "Python-urllib" agent (HTTP 403) from some hosting ranges.
+_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+)
+
+
 def _download(url: str, dest: Path, *, force: bool = False) -> Path:
     """Download ``url`` to ``dest`` unless it already exists (or --force)."""
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -50,8 +58,9 @@ def _download(url: str, dest: Path, *, force: bool = False) -> Path:
         return dest
     log.info("downloading %s -> %s", url, dest.name)
     tmp = dest.with_suffix(dest.suffix + ".part")
+    req = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
     try:
-        with urllib.request.urlopen(url, timeout=120) as resp, tmp.open("wb") as out:
+        with urllib.request.urlopen(req, timeout=300) as resp, tmp.open("wb") as out:
             shutil.copyfileobj(resp, out, length=1024 * 1024)
         tmp.replace(dest)
     except Exception:
