@@ -11,7 +11,7 @@ way. Intended for future maintainers and reviewers.
    `outputs/results.json`, which traces to a documented transformation of
    public data.
 3. **Publishable** — the deliverable is a polished feature article
-   (`article.qmd`), not just a notebook.
+   (`index.qmd`), not just a notebook.
 
 ## Pipeline design
 
@@ -37,7 +37,7 @@ without rerunning the statistics.
 
 ## Why results.json is the single source of truth
 
-Data journalism fails when prose and data drift. Here the article (`article.qmd`)
+Data journalism fails when prose and data drift. Here the article (`index.qmd`)
 imports `results.json` in a hidden code chunk and formats numbers inline, so a
 change in the data pipeline automatically updates the published prose.
 

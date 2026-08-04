@@ -39,7 +39,7 @@ pre-commit install
 - Every statistic quoted in the article must come from
   `outputs/results.json`, which the pipeline regenerates.
 - Never hand-write numbers into the article — use the `results.json` block in
-  `article.qmd` so figures and prose stay in sync.
+  `index.qmd` so figures and prose stay in sync.
 - If you change an analysis assumption, update `scripts/config.py`,
   `docs/methods.qmd`, and re-run the full pipeline
   (`python -m scripts.download && python -m scripts.validate && python -m

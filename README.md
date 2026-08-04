@@ -31,13 +31,13 @@ BLS Consumer Price Index (FRED).
   Published tuition rose from $24,716 in 2000-01 to $65,910 in 2024-25 (+46%
   in real terms), roughly in line with peer elite privates (+48%).
 
-Full details are in the [feature article](article.qmd) and the
+Full details are in the [feature article](index.qmd) and the
 [analysis notebook](notebooks/notebook.qmd).
 
 ## Repository layout
 
 ```
-article.qmd                  Feature article (Quarto)
+index.qmd                   Feature article (Quarto; site homepage)
 notebooks/notebook.qmd       Reproducible analysis walkthrough (Quarto)
 docs/                        Methods, design notes, glossary
 scripts/                     The pipeline (download -> visualize)
@@ -87,7 +87,7 @@ python -m pytest
 python -m ruff check scripts tests
 
 # 4. Render the article and notebook
-quarto render article.qmd
+quarto render index.qmd
 quarto render notebooks/notebook.qmd
 ```
 

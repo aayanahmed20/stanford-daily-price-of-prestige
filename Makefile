@@ -48,7 +48,7 @@ lint:
 render: render-article render-notebook
 
 render-article:
-	$(QUARTO) render article.qmd
+	$(QUARTO) render index.qmd
 
 render-notebook:
 	$(QUARTO) render notebooks/notebook.qmd

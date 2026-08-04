@@ -9,7 +9,7 @@ website:
   navbar:
     left:
       - text: "Article"
-        file: article.qmd
+        file: index.qmd
       - text: "Notebook"
         file: notebooks/notebook.qmd
       - text: "Methods"
