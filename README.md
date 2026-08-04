@@ -47,9 +47,9 @@ scripts/                     The pipeline (download -> visualize)
   analysis.py                Compute all statistics
   visualization.py           Render all figures
 tests/                       Unit tests (no network access)
-data/                        Raw downloads + processed tables (git-ignored)
-figures/                     Generated charts (git-ignored)
-outputs/                     results.json + tables (git-ignored)
+data/                        Raw downloads (git-ignored) + processed tables
+figures/                     Generated charts (committed for the site build)
+outputs/                     results.json + tables (committed)
 ```
 
 ## Data sources
@@ -110,7 +110,16 @@ make render
 - Unit tests cover the statistics, cleaning, and validation helpers without
   touching the network.
 - CI (`.github/workflows/ci.yml`) runs lint and tests on every push; the
-  render workflow deploys the Quarto site to GitHub Pages.
+  render workflow builds the Quarto site and deploys it to GitHub Pages.
+
+## Notes on the data in this repo
+
+The raw downloads (~0.5 GB) are not committed: the pipeline fetches them from
+the U.S. Department of Education and FRED, and the Scorecard server blocks
+GitHub's cloud IPs, so CI can't reach it either. Instead, the *derived*
+artifacts (`data/processed/`, `outputs/`, `figures/`) are committed so the
+site builds on Pages without network access. Refresh them with `make pipeline`
+(or the Python commands above) and commit the changes.
 
 ## License
 

@@ -43,9 +43,12 @@ change in the data pipeline automatically updates the published prose.
 
 ## Version control
 
-Raw data and pipeline outputs are git-ignored (`.gitignore`). The repository
-commits: source, tests, docs, article/notebook source, and the pipeline
-definition. Data is always fetchable via `scripts.download`.
+Raw downloads are git-ignored (`.gitignore`): they total ~0.5 GB, they are
+always fetchable via `scripts.download`, and the Scorecard server refuses
+GitHub's cloud IPs (HTTP 403), so they could not be fetched by CI even if we
+wanted to. To keep the GitHub Pages build network-free and reproducible, the
+*derived* artifacts — `data/processed/`, `outputs/`, `figures/` — ARE
+committed. Refresh them with `make pipeline` and commit the diff.
 
 ## Extensibility
 

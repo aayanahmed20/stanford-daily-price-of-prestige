@@ -4,7 +4,7 @@
 PYTHON ?= python
 QUARTO ?= quarto
 
-.PHONY: all download validate preprocess analysis visualize pipeline tests lint render render-article render-notebook clean
+.PHONY: all download validate preprocess analysis visualize pipeline release-data tests lint render render-article render-notebook clean
 
 ## Run the entire analysis pipeline (download -> report).
 all: pipeline
@@ -31,6 +31,10 @@ visualization:
 
 ## Run steps 1-5 in order.
 pipeline: download validate preprocess analysis visualization
+
+## Refresh the committed derived data (data/processed, outputs, figures).
+## Commit the resulting diff; this is what the GitHub Pages build uses.
+release-data: pipeline
 
 ## Run the test suite.
 tests:

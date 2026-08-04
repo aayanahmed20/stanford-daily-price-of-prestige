@@ -16,7 +16,7 @@ website:
         file: docs/methods.qmd
     right:
       - icon: github
-        href: https://github.com/anomalyco/price-of-prestige
+        href: https://github.com/aayanahmed20/stanford-daily-price-of-prestige
 
 format:
   html:

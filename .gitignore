@@ -10,15 +10,11 @@ venv/
 .coverage
 htmlcov/
 
-# Data - raw inputs are large and must be fetched by the pipeline.
+# Raw inputs are large (and blocked on CI), so they are fetched by the
+# pipeline and never committed. Derived artifacts (data/processed, outputs,
+# figures) ARE committed so the GitHub Pages build needs no network.
 data/raw/*
 !data/raw/.gitkeep
-
-# Reproducible artifacts (rebuilt by the pipeline).
-data/processed/*
-!data/processed/.gitkeep
-outputs/*
-!outputs/.gitkeep
 
 # Notebooks (Quarto) render artifacts
 notebooks/*.html

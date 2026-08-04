@@ -32,27 +32,10 @@ jobs:
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Restore raw data cache
-        uses: actions/cache@v4
-        with:
-          path: data/raw
-          key: scorecard-raw-v1
-
-      - name: Download raw data
-        run: python -m scripts.download
-
-      - name: Validate raw data
-        run: python -m scripts.validate
-
-      - name: Preprocess data
-        run: python -m scripts.preprocess
-
-      - name: Compute analysis
-        run: python -m scripts.analysis
-
-      - name: Render figures
-        run: python -m scripts.visualization
-
+      # The Scorecard download server rejects GitHub's datacenter IPs (HTTP
+      # 403), so the site is built from committed derived artifacts
+      # (data/processed, outputs, figures). Rebuild them locally with
+      # `make pipeline` and commit the refresh.
       - name: Render site
         run: quarto render
 
