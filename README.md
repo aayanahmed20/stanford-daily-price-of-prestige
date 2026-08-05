@@ -66,43 +66,6 @@ Published as a full feature article:
 - `pytest` for tests, `ruff` for lint, `pre-commit` hooks
 - GitHub Actions CI, GitHub Pages for the published site
 
-## Getting started
-
-Requirements: Python 3.11+ (CI runs 3.12) and [Quarto](https://quarto.org/).
-
-```bash
-# 1. Environment
-python -m venv .venv
-.venv\Scripts\activate            # Windows
-source .venv/bin/activate         # macOS/Linux
-pip install -r requirements.txt
-
-# 2. Fetch raw data (~0.5 GB the first time) and run the whole pipeline
-python -m scripts.download
-python -m scripts.validate
-python -m scripts.preprocess
-python -m scripts.analysis
-python -m scripts.visualization
-
-# 3. Tests and lint
-python -m pytest
-python -m ruff check scripts tests
-
-# 4. Render the article, notebook, and site
-quarto render index.qmd
-quarto render notebooks/notebook.qmd
-quarto render          # full website -> _site/
-```
-
-Or with `make`:
-
-```bash
-make pipeline          # download -> validate -> preprocess -> analysis -> visualization
-make tests
-make lint
-make render
-```
-
 ## Project structure
 
 ```
