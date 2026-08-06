@@ -39,6 +39,26 @@ Published as a full feature article:
 **→ [Read the article](https://aayanahmed20.github.io/stanford-daily-price-of-prestige/)**
 (plus the [analysis notebook](https://aayanahmed20.github.io/stanford-daily-price-of-prestige/notebooks/notebook.html))
 
+## The data
+
+| Source | What | Used for |
+| --- | --- | --- |
+| [College Scorecard](https://collegescorecard.ed.gov/) (June 2026 release) | Most-recent-cohort institution file + 1996-97..2025-26 historical archive | Cross-sectional analysis and the 30-year cost trend |
+| FRED / BLS (CPIAUCSL) | Monthly CPI-U, seasonally adjusted | Expressing all dollars in 2025 dollars |
+
+The analysis universe is 2,379 four-year, degree-granting non-profit schools.
+Stanford is compared against 16 elite private peers; the earnings/ROI
+regression uses 1,079 schools with matched earnings and cost data. Every
+statistic in the article is read from `outputs/results.json`, so prose cannot
+drift out of sync with the data.
+
+The raw downloads (~0.5 GB) are not committed: `scripts.download` fetches them
+from the U.S. Department of Education and FRED, and the Scorecard server blocks
+GitHub's cloud IPs, so CI can't reach it either. Instead, the *derived*
+artifacts (`data/processed/`, `outputs/`, `figures/`) are committed so the site
+builds on Pages without network access. Refresh them with `make pipeline` (or
+`make release-data`) and commit the changes.
+
 ## Key findings
 
 - **Expensive on paper, affordable in practice.** Stanford's sticker price is
@@ -84,31 +104,33 @@ figures/                   Generated charts
 outputs/                   results.json + tables (the article's source of truth)
 ```
 
-## The data
-
-| Source | What | Used for |
-| --- | --- | --- |
-| [College Scorecard](https://collegescorecard.ed.gov/) (June 2026 release) | Most-recent-cohort institution file + 1996-97..2025-26 historical archive | Cross-sectional analysis and the 30-year cost trend |
-| FRED / BLS (CPIAUCSL) | Monthly CPI-U, seasonally adjusted | Expressing all dollars in 2025 dollars |
-
-The analysis universe is 2,379 four-year, degree-granting non-profit schools.
-Stanford is compared against 16 elite private peers; the earnings/ROI
-regression uses 1,079 schools with matched earnings and cost data. Every
-statistic in the article is read from `outputs/results.json`, so prose cannot
-drift out of sync with the data.
-
-The raw downloads (~0.5 GB) are not committed: `scripts.download` fetches them
-from the U.S. Department of Education and FRED, and the Scorecard server blocks
-GitHub's cloud IPs, so CI can't reach it either. Instead, the *derived*
-artifacts (`data/processed/`, `outputs/`, `figures/`) are committed so the site
-builds on Pages without network access. Refresh them with `make pipeline` (or
-`make release-data`) and commit the changes.
-
 ## Status
 
-Complete and published — the article, notebook, and site are live, and CI
-passes on the full pipeline (download → validate → preprocess → analyze →
-visualize → render).
+Data pipeline, analysis, notebook, and site are complete and live on GitHub
+Pages. Not yet submitted to *The Stanford Daily* — see below for what that
+requires and what's still open.
+
+## Publication status (Stanford Daily Tech Bootcamp final project)
+
+The bootcamp's final-project brief sets three requirements for publishing with
+*The Stanford Daily*: article format (title, slug, authors, content), data
+analysis, and three sources. Per that brief, AI may be used for the data
+analysis and pipeline code in `scripts/` and `notebooks/notebook.qmd` — not for
+writing `index.qmd`'s article text, which The Daily reviews for exactly that.
+
+| Requirement | Status |
+| --- | --- |
+| Title | Set (`index.qmd` front matter) |
+| Slug | Not yet assigned |
+| Authors | `index.qmd` currently lists "Stanford Daily Tech Bootcamp"; needs real bylines before submission |
+| Article content | Drafted in `index.qmd`; still needs to move to a Google Doc for DE/ME review before publication |
+| Data analysis | Done — `scripts/`, `notebooks/notebook.qmd` |
+| Three sources | Two cited (College Scorecard, BLS/FRED CPI) — a third is needed |
+
+Reference piece from the workshop: Stanford Daily Community Voices, ["What 15
+years of Daily opinion pieces reveal about
+diversity"](https://stanforddaily.com/2025/11/05/from-the-community-more-diversity-rhetoric-fewer-diverse-ideas-what-15-years-of-daily-opinion-pieces-reveal/),
+*The Stanford Daily*, Nov. 5, 2025.
 
 ## License
 
