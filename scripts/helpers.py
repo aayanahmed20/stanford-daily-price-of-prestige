@@ -206,7 +206,7 @@ def save_figure(fig: Any, name: str, subtitle: str | None = None) -> Path:
     if subtitle:
         fig.text(
             0.0,
-            -0.04,
+            -0.14,
             subtitle,
             ha="left",
             va="top",
@@ -215,10 +215,10 @@ def save_figure(fig: Any, name: str, subtitle: str | None = None) -> Path:
             transform=fig.axes[0].transAxes,
         )
         fig.text(
-            1.0,
-            -0.04,
+            0.0,
+            -0.205,
             "The Stanford Daily",
-            ha="right",
+            ha="left",
             va="top",
             fontsize=8.5,
             style="italic",

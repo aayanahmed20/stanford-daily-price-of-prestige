@@ -124,9 +124,9 @@ def fig_sticker_cost(peers: pd.DataFrame, national_median_cost: float) -> str:
         color=PALETTE["slate"],
     )
     ax.set_yticks(range(len(d)))
-    ax.set_yticklabels([("Stanford University" if s else s) for s in d["INSTNM"]], fontsize=10)
+    ax.set_yticklabels(d["INSTNM"].tolist(), fontsize=10)
     ax.set_xlim(0, d["COSTT4_A"].max() * 1.18)
-    _money_ticks(ax)
+    _money_ticks(ax, axis="x")
     _label_axis(
         ax,
         "The sticker price of an elite education",
@@ -153,7 +153,7 @@ def fig_sticker_cost(peers: pd.DataFrame, national_median_cost: float) -> str:
             label="Peer institution",
         ),
     ]
-    ax.legend(handles=legend, loc="lower right")
+    ax.legend(handles=legend, loc="upper left")
     return str(save_figure(fig, "fig_sticker_cost", SOURCE_NOTE))
 
 
@@ -259,9 +259,9 @@ def fig_pell_share(peers: pd.DataFrame, national_median_pell: float) -> str:
         color=PALETTE["slate"],
     )
     ax.set_yticks(range(len(d)))
-    ax.set_yticklabels([("Stanford University" if s else s) for s in d["INSTNM"]], fontsize=10)
+    ax.set_yticklabels(d["INSTNM"].tolist(), fontsize=10)
     ax.set_xlim(0, 0.32)
-    _pct_ticks(ax)
+    _pct_ticks(ax, axis="x")
     _label_axis(
         ax,
         "How many students receive Pell Grants?",
@@ -319,10 +319,10 @@ def fig_debt_by_income(peers: pd.DataFrame, national_median_debt: float) -> str:
         color=PALETTE["slate"],
     )
     ax.set_yticks(y)
-    ax.set_yticklabels([("Stanford University" if s else s) for s in d["INSTNM"]], fontsize=10)
+    ax.set_yticklabels(d["INSTNM"].tolist(), fontsize=10)
     xmax = max(d[["GRAD_DEBT_MDN", "LO_INC_DEBT_MDN", "HI_INC_DEBT_MDN"]].max().max() * 1.15, 10000)
     ax.set_xlim(0, xmax)
-    _money_ticks(ax)
+    _money_ticks(ax, axis="x")
     _label_axis(
         ax,
         "The debt that graduates carry",
@@ -385,9 +385,9 @@ def fig_earnings(peers: pd.DataFrame, national_median_earn: float) -> str:
         color=PALETTE["slate"],
     )
     ax.set_yticks(y)
-    ax.set_yticklabels([("Stanford University" if s else s) for s in d["INSTNM"]], fontsize=10)
+    ax.set_yticklabels(d["INSTNM"].tolist(), fontsize=10)
     ax.set_xlim(0, d["PCT90_EARN_WNE_P10"].max() * 1.1)
-    _money_ticks(ax)
+    _money_ticks(ax, axis="x")
     _label_axis(
         ax,
         "What graduates earn a decade after entering",
@@ -471,11 +471,15 @@ def fig_roi_scatter(roi: pd.DataFrame, peers: pd.DataFrame) -> str:
     for school in labels:
         hit = d[d["INSTNM"] == school]
         if len(hit):
+            is_focal = school == config.FOCAL_SCHOOL
+            # Stanford's star marker (s=420) is much bigger than peer dots (s=70),
+            # so it needs more clearance
+            offset = (14, 12) if is_focal else (8, 5)
             ax.annotate(
                 school.replace("University", "U."),
                 (hit["NPT4_PRIV"].iloc[0], hit["MD_EARN_WNE_P10"].iloc[0]),
                 textcoords="offset points",
-                xytext=(8, 5),
+                xytext=offset,
                 fontsize=8.5,
                 color=PALETTE["ink"],
             )
