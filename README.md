@@ -1,22 +1,6 @@
 # The Price of Prestige
 
-<p>
-  <a href="https://aayanahmed20.github.io/stanford-daily-price-of-prestige/">
-    <img alt="Live article" src="https://img.shields.io/badge/live_article-GitHub_Pages-8C1515?style=flat&logo=githubpages&logoColor=fff&labelColor=8C1515" />
-  </a>
-  <a href="https://www.python.org/">
-    <img alt="Python 3.12" src="https://img.shields.io/badge/python-3.12-3776AB?style=flat&logo=python&logoColor=fff" />
-  </a>
-  <a href="https://quarto.org/">
-    <img alt="Quarto" src="https://img.shields.io/badge/Quarto-1.10-1496FF?style=flat" />
-  </a>
-  <a href="https://github.com/aayanahmed20/stanford-daily-price-of-prestige/actions/workflows/ci.yml">
-    <img alt="CI" src="https://github.com/aayanahmed20/stanford-daily-price-of-prestige/actions/workflows/ci.yml/badge.svg" />
-  </a>
-  <a href="LICENSE">
-    <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-green.svg" />
-  </a>
-</p>
+**[Read the live article](https://aayanahmed20.github.io/stanford-daily-price-of-prestige/)** · Python 3.12 · Quarto · MIT License
 
 **What a Stanford degree is actually worth** — a data-journalism investigation
 into the price, aid, and earnings that come with a Stanford education, built on
