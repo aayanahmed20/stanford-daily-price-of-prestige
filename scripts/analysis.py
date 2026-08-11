@@ -235,20 +235,29 @@ def earnings_stats(peers: pd.DataFrame, universe: pd.DataFrame) -> dict:
 
 
 def hypothesis_tests(peers: pd.DataFrame, universe: pd.DataFrame) -> dict:
-    """Non-parametric comparisons of Stanford vs peers and peers vs national."""
+    """Non-parametric comparisons: Stanford vs peers, and peers vs national."""
     stan = peers[peers["INSTNM"] == config.FOCAL_SCHOOL].iloc[0]
     others = peers[peers["INSTNM"] != config.FOCAL_SCHOOL]
     tests: dict = {}
 
-    def run(key: str, col: str) -> None:
-        s = pd.Series([stan[col]])
-        mw = mann_whitney(s, others[col])
-        d = cohens_d(s, others[col])
+    def run_focal(key: str, col: str) -> None:
+        # A formal two-sample test (Mann-Whitney) doesn't work here: Stanford is a
+        # single observation, and with n2 peers the smallest two-sided p-value the
+        # test can ever produce is ~2/(n2+1) -- with ~15 peers that floor sits around
+        # 0.13, well above the conventional 0.05 threshold. That means the test would
+        # report "not statistically significant" unconditionally, regardless of how
+        # extreme Stanford's actual value is, which would silently misrepresent a real
+        # difference as a null result. A percentile rank against the peer distribution
+        # is the honest way to say "how unusual is Stanford compared to its peers".
+        val = float(stan[col])
+        ref = others[col].dropna()
+        percentile = float((ref < val).mean() * 100 + (ref == val).mean() * 50)
         tests[key] = {
-            "stanford": float(stan[col]),
-            "peer_median": float(others[col].median()),
-            "mann_whitney": mw,
-            "cohens_d": d,
+            "stanford": val,
+            "peer_median": float(ref.median()),
+            "peer_percentile": percentile,
+            "n_peers": int(len(ref)),
+            "cohens_d": cohens_d(pd.Series([val]), ref),
         }
 
     for key, col in [
@@ -257,9 +266,10 @@ def hypothesis_tests(peers: pd.DataFrame, universe: pd.DataFrame) -> dict:
         ("earn_median", "MD_EARN_WNE_P10"),
         ("pell_share", "PCTPELL"),
     ]:
-        run(key, col)
+        run_focal(key, col)
 
-    # Peers vs national (earnings, cost, debt).
+    # Peers vs national IS a proper two-sample comparison (both sides have real
+    # sample sizes), so Mann-Whitney is valid and meaningful here.
     for key, col in [
         ("earn_median", "MD_EARN_WNE_P10"),
         ("sticker_cost", "COSTT4_A"),
