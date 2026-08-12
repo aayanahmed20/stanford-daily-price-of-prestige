@@ -1,11 +1,190 @@
 /*-- scss:defaults --*/
 $stanford-cardinal: #8C1515;
+$stanford-cardinal-dark: #6b1010;
+$ink: #1F2933;
+$slate: #5B6770;
+$paper: #FFFFFF;
+$hairline: #E1E6EA;
+$serif: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+$sans: "Source Sans 3", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+$font-family-sans-serif: $sans !default;
+$font-family-serif: $serif !default;
+$body-color: $ink !default;
+$link-color: $stanford-cardinal !default;
+$toc-color: $stanford-cardinal !default;
 
 /*-- scss:rules --*/
-h1, h2, h3, .navbar-brand {
+
+// Body copy reads as an article: serif text, generous measure, calm line height.
+body {
+  font-family: $sans;
+}
+
+main.content {
+  font-family: $serif;
+  font-size: 1.09rem;
+  line-height: 1.68;
+  color: $ink;
+}
+
+main.content p {
+  margin-bottom: 1.15em;
+}
+
+// Headings stay sans-serif for contrast against serif body copy, in house cardinal.
+h1, h2, h3, h4, .navbar-brand {
+  font-family: $sans;
   color: $stanford-cardinal;
+  font-weight: 700;
+}
+
+h1.title {
+  border-bottom: 3px solid $stanford-cardinal;
+  padding-bottom: 0.4rem;
+}
+
+.subtitle {
+  font-family: $serif;
+  font-style: italic;
+  color: $slate;
+}
+
+h2 {
+  margin-top: 2.6em;
+  padding-top: 0.6em;
+  border-top: 1px solid $hairline;
+  font-size: 1.5rem;
+}
+
+strong { color: $stanford-cardinal; }
+
+// ---------------------------------------------------------------------
+// Figures: the images are the reporting, so give them real presentation
+// ---------------------------------------------------------------------
+.quarto-figure {
+  margin: 2.2em 0;
+}
+
+figure {
+  margin: 2.2em 0;
+}
+
+figure img,
+.quarto-figure img,
+.cell-output-display img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid $hairline;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(31, 41, 51, 0.06), 0 6px 20px rgba(31, 41, 51, 0.08);
+  background: $paper;
+  transition: box-shadow 0.15s ease;
+}
+
+figure img:hover,
+.quarto-figure img:hover {
+  box-shadow: 0 2px 6px rgba(31, 41, 51, 0.09), 0 10px 28px rgba(31, 41, 51, 0.12);
+}
+
+figcaption,
+.figure-caption,
+.quarto-figure figcaption {
+  font-family: $sans;
+  font-size: 0.86rem;
+  color: $slate;
+  text-align: center;
+  margin-top: 0.7em;
+  padding: 0 1.5rem;
+  line-height: 1.5;
+}
+
+figcaption::before {
+  content: "";
+}
+
+// Interactive (Plotly) figures get the same card treatment as static ones.
+.cell-output-display iframe,
+.cell-output-display > div > div {
+  border: 1px solid $hairline;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+// ---------------------------------------------------------------------
+// Callouts, tables, tabs
+// ---------------------------------------------------------------------
+.callout {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(31, 41, 51, 0.05);
+}
+
+.callout-note {
+  border-left-color: $stanford-cardinal;
 }
 
 .callout-note .callout-title {
   color: $stanford-cardinal;
+  font-family: $sans;
+}
+
+table {
+  font-family: $sans;
+  font-size: 0.92rem;
+}
+
+.table > thead {
+  border-bottom: 2px solid $stanford-cardinal;
+}
+
+.table > thead th {
+  color: $stanford-cardinal;
+  font-weight: 700;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: rgba(140, 21, 21, 0.03);
+}
+
+.panel-tabset .nav-link.active {
+  color: $stanford-cardinal;
+  border-bottom: 2px solid $stanford-cardinal;
+  font-weight: 600;
+}
+
+// ---------------------------------------------------------------------
+// Navbar + footer
+// ---------------------------------------------------------------------
+.navbar {
+  border-bottom: 3px solid $stanford-cardinal;
+}
+
+.navbar-brand {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+#quarto-header .navbar {
+  background: $paper !important;
+}
+
+.footer,
+#quarto-footer {
+  border-top: 1px solid $hairline;
+  color: $slate;
+  font-family: $sans;
+  font-size: 0.85rem;
+}
+
+// TOC
+#TOC {
+  font-family: $sans;
+  font-size: 0.88rem;
+}
+
+.sidebar nav[role="doc-toc"] ul > li > a.active {
+  color: $stanford-cardinal;
+  font-weight: 600;
 }

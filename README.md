@@ -29,6 +29,9 @@ Published as a full feature article:
 | --- | --- | --- |
 | [College Scorecard](https://collegescorecard.ed.gov/) (June 2026 release) | Most-recent-cohort institution file + 1996-97..2025-26 historical archive | Cross-sectional analysis and the 30-year cost trend |
 | FRED / BLS (CPIAUCSL) | Monthly CPI-U, seasonally adjusted | Expressing all dollars in 2025 dollars |
+| [Chetty et al., "Mobility Report Cards" (NBER/Opportunity Insights)](https://opportunityinsights.org/paper/mrc/) | Tax-record-based study of family income and outcomes at "Ivy-Plus" colleges | Independent context on income access, cited in [Sources](docs/sources.qmd) |
+
+Full citations: [`docs/sources.qmd`](docs/sources.qmd).
 
 The analysis universe is 2,379 four-year, degree-granting non-profit schools.
 Stanford is compared against 16 elite private peers; the earnings/ROI
@@ -109,7 +112,7 @@ writing `index.qmd`'s article text, which The Daily reviews for exactly that.
 | Authors | `index.qmd` currently lists "Stanford Daily Tech Bootcamp"; needs real bylines before submission |
 | Article content | Drafted in `index.qmd`; still needs to move to a Google Doc for DE/ME review before publication |
 | Data analysis | Done — `scripts/`, `notebooks/notebook.qmd` |
-| Three sources | Two cited (College Scorecard, BLS/FRED CPI) — a third is needed |
+| Three sources | Done — College Scorecard, BLS/FRED CPI, and Chetty et al. (NBER/Opportunity Insights); see [`docs/sources.qmd`](docs/sources.qmd) |
 
 Reference piece from the workshop: Stanford Daily Community Voices, ["What 15
 years of Daily opinion pieces reveal about

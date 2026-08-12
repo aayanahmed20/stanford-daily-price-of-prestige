@@ -8,6 +8,12 @@ website:
   description: "What a Stanford degree is actually worth, from the College Scorecard."
   site-url: "https://aayanahmed20.github.io/stanford-daily-price-of-prestige/"
   repo-url: "https://github.com/aayanahmed20/stanford-daily-price-of-prestige"
+  favicon: assets/favicon.svg
+  open-graph:
+    locale: en_US
+    site-name: "The Price of Prestige"
+  twitter-card:
+    creator: "@stanforddaily"
   navbar:
     left:
       - text: "Article"
@@ -16,6 +22,15 @@ website:
         file: notebooks/notebook.qmd
       - text: "Methods"
         file: docs/methods.qmd
+      - text: "Sources"
+        file: docs/sources.qmd
+    right:
+      - icon: github
+        href: https://github.com/aayanahmed20/stanford-daily-price-of-prestige
+        aria-label: GitHub repository
+  page-footer:
+    left: "Data: U.S. Dept. of Education College Scorecard & FRED/BLS CPI. See [Sources](docs/sources.qmd)."
+    right: "Produced for the [Stanford Daily Tech Bootcamp](https://github.com/TheStanfordDaily/tech-practicum)."
 
 format:
   html:
@@ -29,7 +44,9 @@ format:
         - assets/quarto.scss
     include-in-header:
       - text: |
-          <style>strong { color: #8C1515; }</style>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
 execute:
   freeze: auto

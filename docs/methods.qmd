@@ -11,6 +11,9 @@ file or a formula.
 
 ## Data sources
 
+Full citations for every source, including one used for narrative context
+only (not pulled into the pipeline), are on the [Sources](sources.qmd) page.
+
 ### College Scorecard (June 2026 release)
 
 - **Most-recent-cohort institution file**
