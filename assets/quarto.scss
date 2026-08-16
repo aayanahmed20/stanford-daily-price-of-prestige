@@ -21,6 +21,21 @@ body {
   font-family: $sans;
 }
 
+/* Defensive accessibility: ensure page text and background cannot be overridden by theme or embeds */
+html, body {
+  color: $body-color !important;
+  background-color: $paper !important;
+}
+
+a, .nav-link, a:visited {
+  color: $link-color;
+}
+
+a:hover, .nav-link:hover, .panel-tabset .nav-link:hover {
+  color: darken($link-color, 8%);
+  text-decoration: underline;
+}
+
 main.content {
   font-family: $serif;
   font-size: 1.09rem;
@@ -187,4 +202,58 @@ table {
 .sidebar nav[role="doc-toc"] ul > li > a.active {
   color: $stanford-cardinal;
   font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------
+   Accessibility & figure/container fixes
+   - Enforce readable colors for small text (captions, footers)
+   - Make figure containers create a stacking context and avoid overlap
+   - Make interactive outputs (iframes/plotly) have a background & min-height
+   --------------------------------------------------------------------- */
+
+/* Ensure small text like captions does not get overridden by embeds */
+figure .figure-caption,
+.quarto-figure figcaption,
+.footer,
+#quarto-footer,
+.code, .cell-output-display {
+  color: $slate !important;
+}
+
+/* Figure container: keep images and interactive outputs from overlapping
+   neighbors and ensure a predictable stacking context */
+.quarto-figure,
+figure {
+  position: relative;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  max-width: 980px;
+  margin: 2.2em auto;
+}
+
+/* Interactive output container: give space and a background so text inside
+   embedded visualizations remains readable on top of the site background */
+.cell-output-display {
+  min-height: 220px;
+  background: $paper;
+  overflow: auto;
+  padding: 0.5rem;
+  border-radius: 10px;
+}
+
+.cell-output-display iframe,
+.cell-output-display > div > div {
+  background: $paper;
+  z-index: 1;
+}
+
+/* Small text contrast guard for accessibility */
+.small, .figure-caption, figcaption {
+  color: $slate !important;
+}
+
+/* Make sure any link in a caption is visible */
+.figure-caption a, figcaption a {
+  color: $stanford-cardinal !important;
 }
