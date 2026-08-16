@@ -12,6 +12,7 @@ $font-family-sans-serif: $sans !default;
 $font-family-serif: $serif !default;
 $body-color: $ink !default;
 $link-color: $stanford-cardinal !default;
+$link-active: #0B5FFF; // Active link color (blue) requested
 $toc-color: $stanford-cardinal !default;
 
 /*-- scss:rules --*/
@@ -31,6 +32,18 @@ a, .nav-link, a:visited {
   color: $link-color;
 }
 
+// Make active/selected nav links consistently blue across header, sidebar, and tabsets
+.nav-link.active,
+.navbar .nav-link.active,
+.sidebar nav[role="doc-toc"] ul > li > a.active,
+.panel-tabset .nav-link.active,
+a.active,
+a:active {
+  color: $link-active !important;
+  background: transparent !important;
+}
+
+// Keep hover behavior distinct
 a:hover, .nav-link:hover, .panel-tabset .nav-link:hover {
   color: darken($link-color, 8%);
   text-decoration: underline;
@@ -87,16 +100,22 @@ figure {
 
 figure img,
 .quarto-figure img,
-.cell-output-display img {
+.cell-output-display img,
+.quarto-figure svg,
+.cell-output-display svg,
+.quarto-figure .figure-html,
+.cell-output-display .figure-html {
   display: block;
   margin: 0 auto;
   max-width: 100%;
   height: auto;
+  width: 100%;
   border: 1px solid $hairline;
   border-radius: 10px;
   box-shadow: 0 1px 3px rgba(31, 41, 51, 0.06), 0 6px 20px rgba(31, 41, 51, 0.08);
   background: $paper;
   transition: box-shadow 0.15s ease;
+  object-fit: contain;
 }
 
 figure img:hover,
@@ -126,6 +145,16 @@ figcaption::before {
   border: 1px solid $hairline;
   border-radius: 10px;
   overflow: hidden;
+}
+
+// Ensure svg and embedded html blocks do not overflow or overlap neighbors
+.cell-output-display svg,
+.cell-output-display .figure-html,
+.quarto-figure svg,
+.quarto-figure .figure-html {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
 }
 
 // ---------------------------------------------------------------------
@@ -164,8 +193,8 @@ table {
 }
 
 .panel-tabset .nav-link.active {
-  color: $stanford-cardinal;
-  border-bottom: 2px solid $stanford-cardinal;
+  color: $link-active !important;
+  border-bottom: 2px solid $link-active;
   font-weight: 600;
 }
 
@@ -200,7 +229,7 @@ table {
 }
 
 .sidebar nav[role="doc-toc"] ul > li > a.active {
-  color: $stanford-cardinal;
+  color: $link-active;
   font-weight: 600;
 }
 
