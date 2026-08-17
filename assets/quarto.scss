@@ -43,9 +43,9 @@ a:active {
   background: transparent !important;
 }
 
-// Keep hover behavior distinct
+// Hover matches the active-link blue, so hover and active states read consistently
 a:hover, .nav-link:hover, .panel-tabset .nav-link:hover {
-  color: darken($link-color, 8%);
+  color: $link-active;
   text-decoration: underline;
 }
 
