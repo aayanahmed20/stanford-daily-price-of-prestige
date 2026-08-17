@@ -94,10 +94,11 @@ outputs/                   results.json + tables (the article's source of truth)
 ## Status
 
 Data pipeline, analysis, notebook, and site are complete and live on GitHub
-Pages. Not yet submitted to *The Stanford Daily* — see below for what that
-requires and what's still open.
+Pages. `tests/` covers the pipeline with no network access required; run with
+`pytest tests/`. Not yet submitted to *The Stanford Daily* — see below for
+what that requires and what's still open.
 
-## Publication status (Stanford Daily Tech Bootcamp final project)
+### Publication status (Stanford Daily Tech Bootcamp final project)
 
 The bootcamp's final-project brief sets three requirements for publishing with
 *The Stanford Daily*: article format (title, slug, authors, content), data
