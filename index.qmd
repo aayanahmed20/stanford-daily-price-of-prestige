@@ -28,6 +28,9 @@ def usd(x, dec=0):
 
 def pct(x, dec=1):
     return f"{x*100:.{dec}f}%"
+
+def ratio(x, dec=1):
+    return f"{x:.{dec}f}x"
 ```
 
 ::: {.callout-note appearance="simple"}
@@ -50,7 +53,7 @@ between them is enormous.
 #### Sticker price
 
 In 2024-25 the full cost of attendance at Stanford was
-`{python} usd(F['sticker_cost'])`. That is `{python} usd(F['multiples']['cost_vs_national'])` times the median
+`{python} usd(F['sticker_cost'])`. That is `{python} ratio(F['multiples']['cost_vs_national'])` the median
 sticker price across all four-year colleges — a price point shared only with
 the nation's most selective private universities.
 
@@ -150,7 +153,7 @@ less a policy achievement than a measure of who gets in.
 
 The number families actually want is what graduates earn. Ten years after
 enrollment, the median Stanford graduate earns **`{python} usd(F['earn_median_p10'])`** —
-about `{python} usd(F['multiples']['earnings_vs_national'])` times the national median
+about `{python} ratio(F['multiples']['earnings_vs_national'])` the national median
 of `{python} usd(F['national']['median_earnings_p10'])`.
 
 ![Distribution of earnings for Stanford and all four-year colleges.](./figures/fig_earnings.png){#fig-earnings}
