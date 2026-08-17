@@ -116,15 +116,9 @@ def fig_sticker_cost(peers: pd.DataFrame, national_median_cost: float) -> str:
     for i, v in enumerate(d["COSTT4_A"]):
         ax.text(v + 900, i, f"${v:,.0f}", va="center", fontsize=9, color=PALETTE["ink"])
     ax.axvline(national_median_cost, color=PALETTE["national"], linestyle="--", linewidth=1.2)
-    ax.text(
-        national_median_cost + 900,
-        len(d) - 0.7,
-        f"U.S. four-year non-profit median: ${national_median_cost:,.0f}",
-        fontsize=9,
-        color=PALETTE["slate"],
-    )
     ax.set_yticks(range(len(d)))
     ax.set_yticklabels(d["INSTNM"].tolist(), fontsize=10)
+    ax.set_ylim(-0.7, len(d) - 1 + 1.1)
     ax.set_xlim(0, d["COSTT4_A"].max() * 1.18)
     _money_ticks(ax, axis="x")
     _label_axis(
@@ -132,6 +126,16 @@ def fig_sticker_cost(peers: pd.DataFrame, national_median_cost: float) -> str:
         "The sticker price of an elite education",
         "Total cost of attendance, 2024-25 (tuition + fees + room/board)",
         None,
+    )
+    # National-median label sits in the clear band above the tallest bar,
+    # never on top of a bar (every bar here is well above the national median).
+    ax.text(
+        national_median_cost,
+        len(d) - 1 + 0.75,
+        f"U.S. four-year non-profit median: ${national_median_cost:,.0f}",
+        fontsize=9,
+        ha="center",
+        color=PALETTE["slate"],
     )
     legend = [
         Line2D(
@@ -153,7 +157,19 @@ def fig_sticker_cost(peers: pd.DataFrame, national_median_cost: float) -> str:
             label="Peer institution",
         ),
     ]
-    ax.legend(handles=legend, loc="upper left")
+    # Every bar starts at x=0 and runs nearly the full axis width (even the
+    # shortest one), so there is no corner of the plot -- left, right, upper,
+    # or lower -- that isn't covered by a bar or its end label for at least
+    # one row. The only space guaranteed to stay clear of the data is above
+    # the axes entirely, next to the title.
+    ax.legend(
+        handles=legend,
+        loc="lower left",
+        bbox_to_anchor=(0.0, 1.13, 1.0, 0.1),
+        ncol=2,
+        mode="expand",
+        frameon=False,
+    )
     return str(save_figure(fig, "fig_sticker_cost", SOURCE_NOTE))
 
 
@@ -202,20 +218,30 @@ def fig_aid_curve(aid: pd.DataFrame) -> str:
         markersize=8,
         label="Stanford University",
     )
-    for xi, v in zip(x, stan_vals, strict=False):
-        if v is not None and not np.isnan(v):
-            ax.annotate(
-                f"${v:,.0f}",
-                (xi, v),
-                textcoords="offset points",
-                xytext=(0, 9),
-                ha="center",
-                fontsize=9,
-                color=PALETTE["stanford"],
-            )
+    peer_med_vals = med.reindex(buckets).values
+    for xi, v, peer_v in zip(x, stan_vals, peer_med_vals, strict=False):
+        if v is None or np.isnan(v):
+            continue
+        # Where the peer median sits close above Stanford's point, an
+        # upward label collides with the peer line/marker. Flip the label
+        # below the point in that case; otherwise keep it above (default).
+        close_above = not np.isnan(peer_v) and 0 <= (peer_v - v) < 4500
+        yoffset = -13 if close_above else 9
+        va = "top" if close_above else "bottom"
+        ax.annotate(
+            f"${v:,.0f}",
+            (xi, v),
+            textcoords="offset points",
+            xytext=(0, yoffset),
+            ha="center",
+            va=va,
+            fontsize=9,
+            color=PALETTE["stanford"],
+            bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85),
+        )
     ax.axhline(0, color=PALETTE["faint"], linewidth=1, linestyle=":")
     ax.set_xticks(x)
-    ax.set_xticklabels([b.replace("\u2013", "-") for b in buckets], fontsize=9)
+    ax.set_xticklabels([b.replace("–", "-") for b in buckets], fontsize=9)
     ax.set_ylim(-6000, 60000)
     _money_ticks(ax)
     _label_axis(
@@ -260,7 +286,10 @@ def fig_pell_share(peers: pd.DataFrame, national_median_pell: float) -> str:
     )
     ax.set_yticks(range(len(d)))
     ax.set_yticklabels(d["INSTNM"].tolist(), fontsize=10)
-    ax.set_xlim(0, 0.32)
+    # Bound the axis by whichever is larger -- the tallest bar or the
+    # national median line -- so the median line/label is never clipped
+    # off the right edge of the chart (it used to run past a fixed 0.32).
+    ax.set_xlim(0, max(d["PCTPELL"].max(), national_median_pell) * 1.18)
     _pct_ticks(ax, axis="x")
     _label_axis(
         ax,
@@ -282,65 +311,88 @@ def fig_pell_share(peers: pd.DataFrame, national_median_pell: float) -> str:
 
 
 def fig_debt_by_income(peers: pd.DataFrame, national_median_debt: float) -> str:
+    """One bar per school (all-graduates median debt), matching the visual
+    language of the sticker-cost and Pell-share charts.
+
+    The previous version drew four same-colored sub-bars per school (all
+    graduates / low-income / first-gen / high-income) at tiny vertical
+    offsets, then stacked four value labels on Stanford's row alone -- since
+    the four figures are all close together in dollars, the labels rendered
+    on top of each other and were illegible. Peer schools' sub-bars were
+    also indistinguishable from one another (same color, position was the
+    only cue), so the extra detail wasn't actually readable there either.
+    A single bar per school plus one clean breakdown line for Stanford
+    keeps every value legible without changing what the chart reports.
+    """
     from matplotlib.lines import Line2D
 
     d = peers.dropna(subset=["GRAD_DEBT_MDN"]).sort_values("GRAD_DEBT_MDN").copy()
-    metrics = [
-        ("GRAD_DEBT_MDN", "All graduates"),
-        ("LO_INC_DEBT_MDN", "Graduates from low-income families"),
-        ("FIRSTGEN_DEBT_MDN", "First-generation graduates"),
-        ("HI_INC_DEBT_MDN", "Graduates from high-income families"),
-    ]
     fig, ax = _fig()
     y = np.arange(len(d))
-    for i, (col, _label) in enumerate(metrics):
-        off = (i - 1.5) * 0.16
-        vals = d[col]
-        colors = np.where(d["is_stanford"], PALETTE["stanford"], PALETTE["peer"])
-        ax.barh(y + off, vals.fillna(0), height=0.11, color=colors, alpha=0.85)
-    stan = d[d["is_stanford"]].iloc[0]
-    for i, (col, _label) in enumerate(metrics):
-        if not np.isnan(stan[col]):
-            off = (i - 1.5) * 0.16
-            ax.text(
-                stan[col] + 300,
-                d.index.tolist().index(stan.name) + off,
-                f"${stan[col]:,.0f}",
-                va="center",
-                fontsize=8,
-                color=PALETTE["stanford"],
-            )
+    colors = np.where(d["is_stanford"], PALETTE["stanford"], PALETTE["peer"])
+    ax.barh(y, d["GRAD_DEBT_MDN"], color=colors, alpha=0.9, height=0.62)
+    for i, v in enumerate(d["GRAD_DEBT_MDN"]):
+        ax.text(v + 300, i, f"${v:,.0f}", va="center", fontsize=9, color=PALETTE["ink"])
+
     ax.axvline(national_median_debt, color=PALETTE["national"], linestyle="--")
+
+    stan = d[d["is_stanford"]].iloc[0]
+    breakdown_bits = [
+        ("low-income", stan["LO_INC_DEBT_MDN"]),
+        ("first-gen", stan["FIRSTGEN_DEBT_MDN"]),
+        ("high-income", stan["HI_INC_DEBT_MDN"]),
+    ]
+    breakdown = " · ".join(
+        f"{name} ${v:,.0f}" for name, v in breakdown_bits if not np.isnan(v)
+    )
+
+    xmax = (
+        max(
+            d[["GRAD_DEBT_MDN", "LO_INC_DEBT_MDN", "FIRSTGEN_DEBT_MDN", "HI_INC_DEBT_MDN"]]
+            .max()
+            .max(),
+            national_median_debt,
+        )
+        * 1.2
+    )
+    ax.set_xlim(0, xmax)
+    ax.set_ylim(-0.7, len(d) - 1 + 1.15)
     ax.text(
-        national_median_debt + 300,
-        len(d) - 0.8,
+        national_median_debt,
+        len(d) - 1 + 0.78,
         f"National median: ${national_median_debt:,.0f}",
         fontsize=9,
+        ha="center",
         color=PALETTE["slate"],
     )
     ax.set_yticks(y)
     ax.set_yticklabels(d["INSTNM"].tolist(), fontsize=10)
-    xmax = max(d[["GRAD_DEBT_MDN", "LO_INC_DEBT_MDN", "HI_INC_DEBT_MDN"]].max().max() * 1.15, 10000)
-    ax.set_xlim(0, xmax)
     _money_ticks(ax, axis="x")
     _label_axis(
         ax,
         "The debt that graduates carry",
-        "Median cumulative federal debt, by group (most recent cohort)",
+        "Median cumulative federal debt, all graduates (most recent cohort)",
         None,
     )
+    if breakdown:
+        # The full breakdown string is wider than any clear strip inside the
+        # plot (it would run across several bars no matter where it's
+        # anchored), so it goes below the axes as a third footer line --
+        # under save_figure()'s source-note and credit lines, not on top of
+        # them.
+        ax.text(
+            0.0,
+            -0.27,
+            f"Stanford by family background: {breakdown}",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=8.5,
+            color=PALETTE["stanford"],
+        )
     legend = [
         Line2D([0], [0], color=PALETTE["stanford"], lw=3, label="Stanford"),
         Line2D([0], [0], color=PALETTE["peer"], lw=3, label="Peer"),
-        Line2D(
-            [0],
-            [0],
-            color=PALETTE["slate"],
-            lw=0,
-            marker="|",
-            markersize=12,
-            label="National median",
-        ),
     ]
     ax.legend(handles=legend, loc="lower right", fontsize=9)
     return str(save_figure(fig, "fig_debt_by_income", SOURCE_NOTE))
@@ -468,13 +520,16 @@ def fig_roi_scatter(roi: pd.DataFrame, peers: pd.DataFrame) -> str:
         "Rice University",
         "Northwestern University",
     ]
+    # Per-school offset overrides where the default (8, 5) crowds a
+    # neighboring point -- Rice sits right next to another peer dot above it.
+    label_offsets = {"Rice University": (10, -12)}
     for school in labels:
         hit = d[d["INSTNM"] == school]
         if len(hit):
             is_focal = school == config.FOCAL_SCHOOL
             # Stanford's star marker (s=420) is much bigger than peer dots (s=70),
             # so it needs more clearance
-            offset = (14, 12) if is_focal else (8, 5)
+            offset = (14, 12) if is_focal else label_offsets.get(school, (8, 5))
             ax.annotate(
                 school.replace("University", "U."),
                 (hit["NPT4_PRIV"].iloc[0], hit["MD_EARN_WNE_P10"].iloc[0]),
@@ -536,7 +591,7 @@ def fig_cost_trend(trend: pd.DataFrame) -> str:
     end = t["real_stanford_tuition"].iloc[-1]
     pct = (end / start - 1) * 100
     ax.annotate(
-        f"Real (2025$) tuition at Stanford\n{start:,.0f} \u2192 {end:,.0f} ({pct:+.0f}%)",
+        f"Real (2025$) tuition at Stanford\n{start:,.0f} → {end:,.0f} ({pct:+.0f}%)",
         xy=(t["year_int"].iloc[-1], end),
         xytext=(-40, 14),
         textcoords="offset points",
@@ -585,7 +640,7 @@ def interactive_aid_curve(aid: pd.DataFrame) -> str:
             )
         )
     fig.update_layout(
-        title="Average net price by family income \u2014 Stanford and its peers",
+        title="Average net price by family income — Stanford and its peers",
         xaxis_title="Family income (dependent students)",
         yaxis_title="Average net price per year (2024-25)",
         hovermode="closest",
