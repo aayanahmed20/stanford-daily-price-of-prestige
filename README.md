@@ -91,6 +91,21 @@ figures/                   Generated charts
 outputs/                   results.json + tables (the article's source of truth)
 ```
 
+## Setup
+
+```bash
+pip install -r requirements.txt
+make pipeline     # download -> validate -> preprocess -> analysis -> visualization
+make render       # render the article + notebook to _site/
+```
+
+`make download` needs network access to the U.S. Department of Education and FRED,
+which GitHub's cloud IPs are blocked from — the derived artifacts (`data/processed/`,
+`outputs/`, `figures/`) are already committed, so `make render` and `pytest tests/` work
+without it. See the [Makefile](Makefile) for the individual targets (`download`,
+`validate`, `preprocess`, `analysis`, `visualization`, `tests`, `lint`, `render-article`,
+`render-notebook`, `clean`).
+
 ## Status
 
 Data pipeline, analysis, notebook, and site are complete and live on GitHub
