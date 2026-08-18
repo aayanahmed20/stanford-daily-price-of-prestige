@@ -1,6 +1,12 @@
-# The Price of Prestige
+# Stanford Daily: The Price of Prestige
 
-**[Read the live article](https://aayanahmed20.github.io/stanford-daily-price-of-prestige/)** · Python 3.12 · Quarto · MIT License
+**[Read the live article](https://aayanahmed20.github.io/stanford-daily-price-of-prestige/)**
+
+![Python](https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Pandas](https://img.shields.io/badge/pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![Plotly](https://img.shields.io/badge/plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)
+![Sass](https://img.shields.io/badge/sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 
 **What a Stanford degree is actually worth** — a data-journalism investigation
 into the price, aid, and earnings that come with a Stanford education, built on
@@ -140,5 +146,5 @@ diversity"](https://stanforddaily.com/2025/11/05/from-the-community-more-diversi
 MIT — see [LICENSE](LICENSE). Data belongs to the U.S. Department of Education
 and the U.S. Bureau of Labor Statistics.
 
-*The Price of Prestige* was produced for the [Stanford Daily Tech
+*Stanford Daily: The Price of Prestige* was produced for the [Stanford Daily Tech
 Bootcamp](https://github.com/TheStanfordDaily/tech-practicum).
