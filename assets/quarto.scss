@@ -210,6 +210,15 @@ table {
   letter-spacing: -0.01em;
 }
 
+// Bootstrap's default navbar-brand hover/focus color is white (meant for a dark navbar).
+// This site forces a white navbar background above, so without this override, hovering
+// or focusing the "The Price of Prestige" brand text turns it white-on-white and it
+// disappears. Pin it to the same cardinal color used elsewhere so it stays visible.
+.navbar-brand:hover,
+.navbar-brand:focus {
+  color: $stanford-cardinal !important;
+}
+
 #quarto-header .navbar {
   background: $paper !important;
 }
