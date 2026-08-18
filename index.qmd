@@ -192,7 +192,7 @@ earnings across schools. Three predictors dominate:
 And yet Stanford still clears the bar. The model, fit on the *same* data,
 predicts median earnings of `{python} usd(FR['fitted_dollars'])` for a school with
 Stanford's profile. Actual median earnings are `{python} usd(FR['actual_dollars'])` — a
-residual of about **`{python} usd(FR['residual_pct'], 0)`% above prediction**.
+residual of about **`{python} pct(FR['residual_pct']/100, 0)` above prediction**.
 
 ![Earnings vs. net price across 1,079 four-year colleges, with Stanford and peers highlighted.](./figures/fig_roi_scatter.png){#fig-roi}
 
