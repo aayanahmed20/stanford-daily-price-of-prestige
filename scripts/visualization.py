@@ -651,7 +651,13 @@ def interactive_aid_curve(aid: pd.DataFrame) -> str:
     )
     out = config.FIGURES_DIR / "interactive" / "interactive_aid_curve.html"
     ensure_dir(out.parent)
-    fig.write_html(out, include_plotlyjs="cdn", full_html=True)
+    # full_html=False: emit an embeddable <div>+<script> fragment, not a full
+    # standalone document. index.qmd reads this file's raw text and inlines it
+    # into the article page with IPython's HTML(); a full_html=True export
+    # (its own <html>/<head>/<body> wrapper) gets nested inside the article's
+    # own <body>, which is invalid HTML and made the chart render blank/unstable
+    # in the published page even though the SVG itself was generated correctly.
+    fig.write_html(out, include_plotlyjs="cdn", full_html=False)
     log.info("saved interactive figure: %s", out)
     return str(out)
 
