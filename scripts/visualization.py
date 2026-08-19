@@ -657,7 +657,7 @@ def interactive_aid_curve(aid: pd.DataFrame) -> str:
     # (its own <html>/<head>/<body> wrapper) gets nested inside the article's
     # own <body>, which is invalid HTML and made the chart render blank/unstable
     # in the published page even though the SVG itself was generated correctly.
-    fig.write_html(out, include_plotlyjs="cdn", full_html=False)
+    fig.write_html(out, include_plotlyjs="inline", full_html=False)
     log.info("saved interactive figure: %s", out)
     return str(out)
 
